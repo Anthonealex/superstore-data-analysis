@@ -1,0 +1,18 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+df = pd.read_csv('C:/Users/antony.alex/Downloads/train.csv')
+df['Order Date'] = pd.to_datetime(df['Order Date'], dayfirst=True, errors='coerce')
+df['Yearmonth'] = df['Order Date'].dt.to_period('M')
+region_cat_sales = df.groupby(['Region', 'Category'])['Sales'].sum().reset_index()
+print(region_cat_sales)
+pivot_table = region_cat_sales.pivot(index = 'Region', columns = 'Category', values = 'Sales')
+print(pivot_table)
+plt.figure(figsize=(10,6))
+pivot_table.plot(kind="bar")
+# plt.plot(monthly_sales['Yearmonth'], monthly_sales['Sales'], marker = 'o')
+plt.xticks(rotation = 45)
+plt.title('Sales by region & category')
+plt.xlabel('Region')
+plt.ylabel('Sales')
+plt.tight_layout()
+plt.show()
